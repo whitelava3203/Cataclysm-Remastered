@@ -21,10 +21,10 @@ public class DataController : MonoBehaviour
     public void 오브젝트생성(object obj)
     {
         Type T = obj.GetType();
-        if(T == typeof(DataStructure.맵.청크Container))
+        if(T == typeof(DataStructure.Map.ChunkContainer))
         {
-            DataStructure.맵.청크Container 청크C1 = (DataStructure.맵.청크Container)obj;
-            foreach (DataStructure.맵.타일Container 타일C1 in 청크C1.Data.타일리스트)
+            DataStructure.Map.ChunkContainer 청크C1 = (DataStructure.Map.ChunkContainer)obj;
+            foreach (DataStructure.Map.TileContainer 타일C1 in 청크C1.Data.TileList)
             {
 
             }

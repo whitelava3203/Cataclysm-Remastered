@@ -33,8 +33,8 @@ public class FloorController : MonoBehaviour
     {
         _maindata = maindata;
     }
-    private DataStructure.맵.타일Container _Data;
-    public DataStructure.맵.타일Container Data
+    private DataStructure.Map.TileContainer _Data;
+    public DataStructure.Map.TileContainer Data
     {
         get
         {

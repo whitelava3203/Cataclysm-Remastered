@@ -24,7 +24,7 @@ public class DataLoader : MonoBehaviour
 
     void Start()
     {
-        //Debug.Log(System.Environment.CurrentDirectory);
+        Debug.Log(System.Environment.CurrentDirectory);
         DataStructure maindata = new DataStructure();
         LoadMod(ref maindata);
     }
@@ -36,7 +36,7 @@ public class DataLoader : MonoBehaviour
         List<string> str2 = new List<string>();
         if (di.Exists)
         {
-            DirectoryInfo[] CInfo = di.GetDirectories("*", System.IO.SearchOption.AllDirectories);
+            DirectoryInfo[] CInfo = di.GetDirectories("*", System.IO.SearchOption.TopDirectoryOnly);
             foreach(DirectoryInfo info in CInfo)
             {
                 ModFolderDiList.Add(info);
@@ -109,29 +109,32 @@ public class DataLoader : MonoBehaviour
         DataLoadScriptLoader.Load(loader,ref maindata,this);
     }
 
-    public Sprite 이미지로드(Drawable drawobj, DataStructure maindata)
+    public Sprite ImageLoad(Drawable drawobj, DataStructure maindata)
     {
         string str;
         string str2;
         if (drawobj.IsShapedImage == true)
         {
-            str = drawobj.코드명 + "_" + ((int)drawobj.모양).ToString();
-            str2 = drawobj.이미지경로 + "_" + ((int)drawobj.모양).ToString();
+            str = drawobj.CodeName + "_" + ((int)drawobj.Shape).ToString();
+            str2 = drawobj.ImagePath + "_" + ((int)drawobj.Shape).ToString();
         }
         else
         {
-            str = drawobj.코드명;
-            str2 = drawobj.이미지경로;
+            str = drawobj.CodeName;
+            str2 = drawobj.ImagePath;
         }
         str2 = Path.Combine(this.ModPath, str2);
 
-        if (maindata.data.이미지저장소.ContainsKey(str))
+        if (maindata.data.ImageStorage.ContainsKey(str))
         {
-            return maindata.data.이미지저장소[str];
+            return maindata.data.ImageStorage[str];
         }
         else
         {
-            Sprite spr = File.ReadAllBytes(str2) as object as Sprite;
+            Texture2D texture = new Texture2D(1, 1, TextureFormat.ARGB32, false);
+            byte[] bytes = File.ReadAllBytes(str2);
+            texture.LoadImage(bytes);
+            Sprite spr = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(.5f, .5f));
             if (spr == null)
             {
                 Debug.Log(@"오류/파일" + str2 + " 을 찿을수 없습니다.");
@@ -139,7 +142,7 @@ public class DataLoader : MonoBehaviour
             }
             else
             {
-                maindata.data.이미지저장소.Add(str, spr);
+                maindata.data.ImageStorage.Add(str, spr);
                 return spr;
             }
         }
@@ -150,11 +153,11 @@ public static class DataLoadScriptLoader
 {
     public static void Load(DataLoadScript dls,ref DataStructure maindata, DataLoader dataloader)
     {
-        foreach (Func<DataStructure.맵.타일> 타일로드 in dls.타일리스트)
+        foreach (Func<DataStructure.Map.Tile> 타일로드 in dls.TileList)
         {
-            DataStructure.맵.타일 타일1 = 타일로드();
-            maindata.data.타일저장소.Add(타일1);
-            dataloader.이미지로드(타일1, maindata);
+            DataStructure.Map.Tile 타일1 = 타일로드();
+            maindata.data.TileStorage.Add(타일1);
+            dataloader.ImageLoad(타일1, maindata);
         }
 
 

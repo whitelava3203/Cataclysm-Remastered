@@ -34,8 +34,8 @@ public class DataStructure : MonoBehaviour
         }
         public void Add(T obj)
         {
-            this.data.Add(obj.코드명,obj);
-            this.codedata.Add(obj.코드명);
+            this.data.Add(obj.CodeName,obj);
+            this.codedata.Add(obj.CodeName);
         }
        public void Clear()
        {
@@ -62,31 +62,31 @@ public class DataStructure : MonoBehaviour
 
     public class CStorage
     {
-        public CodeStructure<맵.타일> 타일저장소 = new CodeStructure<맵.타일>();
-        public Dictionary<string, Sprite> 이미지저장소 = new Dictionary<string, Sprite>();
+        public CodeStructure<Map.Tile> TileStorage = new CodeStructure<Map.Tile>();
+        public Dictionary<string, Sprite> ImageStorage = new Dictionary<string, Sprite>();
     }
     public class CodeObject
     {
-        public string 코드명;
+        public string CodeName;
     }
     public class Drawable : CodeObject
     {
-        public enum E우선순위
+        public enum EPriority
         {
-            바닥 = 0,
-            벽 = 1000,
-            창문 = 2000,
+            Floor = 0,
+            Wall = 1000,
+            Window = 2000,
             장식물 = 3000,
-            유닛 = 4000
+            Unit = 4000
         }
-        public enum E방향
+        public enum EDirection
         {
-            정방향,
-            시계방향90도,
-            시계방향180도,
-            시계방향270도
+            Straight,
+            Clockwise90,
+            Clockwise180,
+            Clockwise270
         }
-        public enum E모양
+        public enum EShape
         {
             단칸,
             꽉참,
@@ -96,43 +96,74 @@ public class DataStructure : MonoBehaviour
             세개
         }
         public bool IsShapedImage = false;
-        public string 이미지경로;
-        public double 이미지크기;
-        public E우선순위 우선순위;
-        public E모양 모양;
-        public E방향 방향;
+        public string ImagePath;
+        public double ImageSize;
+        public EPriority Priority;
+        public EShape Shape;
+        public EDirection Direction;
     }
-
-    public class 맵
+    public class ItemRelated
     {
-        public class C월드
+
+        
+        public class Item
+        {
+            public string Name;
+            public LangString Explanation = new LangString();
+            public string DeathHelp;
+            public CItemAttribute Attribute = new CItemAttribute();
+            public CMaterial Material = new CMaterial();
+            public CItemEvent TileEvent = new CItemEvent();
+
+            public class CItemAttribute
+            {
+
+            }
+            public class CMaterial
+            {
+
+            }
+
+            public class CItemEvent
+            {
+
+            }
+        }
+        public class ItemContainer
         {
 
-            public List<List<청크Container>> 청크리스트 = new List<List<청크Container>>();
+        }
+    }
+    public class Map
+    {
+        public class CWorld
+        {
+
+            public List<List<ChunkContainer>> ChunkList = new List<List<ChunkContainer>>();
         }
 
-        public class 청크
+        public class Chunk
         {
-            public List<타일Container> 타일리스트 = new List<타일Container>();
+            public List<TileContainer> TileList = new List<TileContainer>();
 
         }
-        public class 청크Container : IntPos
+        public class ChunkContainer : IntPos
         {
-            public 청크 Data;
+            public Chunk Data;
             public int X;
             public int Y;
 
-            public 청크Container()
+            public ChunkContainer()
             {
 
             }
-            public 청크Container(청크 청크1)
+            public ChunkContainer(Chunk chunk1)
             {
-                Data = 청크1;
+                Data = chunk1;
             }
-            public 청크Container(청크 청크1, int x, int y)
+            public ChunkContainer(Chunk chunk1, int x, int y)
             {
-                Data = 청크1;
+                Data = chunk1;
                 X = x;
                 Y = y;
             }
@@ -147,22 +178,22 @@ public class DataStructure : MonoBehaviour
         {
 
         }
-        public class 타일 : Drawable
+        public class Tile : Drawable
         {
-            public string 이름;
-            public string 설명;
-            public string 사망도움말;
-            public C특성 특성 = new C특성();
-            public C타일이벤트 타일이벤트 = new C타일이벤트();
+            public string Name;
+            public LangString Explanation = new LangString();
+            public string DeathHelp;
+            public CTileAttribute Attribute = new CTileAttribute();
+            public CTileEvent TileEvent = new CTileEvent();
 
 
-            public class C특성
+            public class CTileAttribute
             {
                 public bool PlayerPassable = true;
                 public bool LightPassable = true;
             }
 
-            public class C타일이벤트
+            public class CTileEvent
             {
                 public Action PlayerOnTile;
                 public Action Update;
@@ -170,26 +201,26 @@ public class DataStructure : MonoBehaviour
 
 
         }
-        public class 타일Container : IntPos
+        public class TileContainer : IntPos
         {
-            public 맵.타일 Data;
+            public Map.Tile Data;
             public int X;
             public int Y;
 
             public bool IsUpdated = false;
             public bool IsDeleted = false;
 
-            public 타일Container()
+            public TileContainer()
             {
 
             }
-            public 타일Container(맵.타일 타일1)
+            public TileContainer(Map.Tile tile1)
             {
-                Data = 타일1;
+                Data = tile1;
             }
-            public 타일Container(맵.타일 타일1, int x, int y)
+            public TileContainer(Map.Tile tile1, int x, int y)
             {
-                Data = 타일1;
+                Data = tile1;
                 X = x;
                 Y = y;
             }
@@ -203,27 +234,27 @@ public class DataStructure : MonoBehaviour
 }
 public class DataLoadScript
 {
-    public List<Func<DataStructure.맵.타일>> 타일리스트 = new List<Func<DataStructure.맵.타일>>();
+    public List<Func<DataStructure.Map.Tile>> TileList = new List<Func<DataStructure.Map.Tile>>();
 }
 public class LangString
 {
-    public enum 언어
+    public enum Language
     {
         Kr,
         En
     }
-    private Dictionary<언어, string> data = new Dictionary<언어, string>();
+    private Dictionary<Language, string> data = new Dictionary<Language, string>();
 
-    public static List<언어> CurrentLanguage = new List<언어>();
+    public static List<Language> CurrentLanguage = new List<Language>();
 
-    public void SetString(string str, 언어 lang)
+    public void SetString(string str, Language lang)
     {
         this.data.Add(lang,str);
     }
 
     public static implicit operator string(LangString langstr)
     {
-        foreach(언어 lang in CurrentLanguage)
+        foreach(Language lang in CurrentLanguage)
         {
             if(langstr.data[lang] != null)
             {
