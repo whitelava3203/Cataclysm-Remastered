@@ -7,13 +7,13 @@ using static DataStructure;
 class Main : MonoBehaviour
 {
     DataLoadScript load = new DataLoadScript();
-    DataStructure data;//this is ref
+    DataStructure refdata;
     void Initialize()
     {
-		
+
         load.TileList.Add(() =>
         {
-			
+
             Map.Tile tile = new Map.Tile();
             tile.CodeName = @"main/tile/floor/empty";
             tile.Name["KOR"] = "빈칸";
