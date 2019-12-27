@@ -154,10 +154,9 @@ public class DataStructure : MonoBehaviour
             public LangString Name = new LangString();
             public LangString Explanation = new LangString();
             public LangString DeathHelp = new LangString();
+            public Material BaseMaterial = new Material();
             public Dictionary<string, Action> Event = new Dictionary<string, Action>();
             public Dictionary<string,object> Attribute = new Dictionary<string, object>();
-            public Material BaseMaterial = new Material();
-
 
             public class CTileAttribute//not used
             {
