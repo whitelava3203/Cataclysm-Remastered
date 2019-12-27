@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿//moved to DataStructure.cs
+
+using System.Collections.Generic;
 using UnityEngine;
 using System;
 
@@ -6,6 +8,7 @@ using System;
 
 public class MainData : MonoBehaviour
 {   
+
     // Use this for initialization
     void Start()
     {

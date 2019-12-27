@@ -159,6 +159,11 @@ public static class DataLoadScriptLoader
             maindata.data.TileStorage.Add(tile1);
             dataloader.ImageLoad(tile1, maindata);
         }
+        foreach(Func<DataStructure.Map.Material> materialload in loader.MaterialList)
+        {
+            DataStructure.Map.Material material1 = materialload();
+            maindata.data.MaterialStorage.Add(material1);
+        }
 
 
     }

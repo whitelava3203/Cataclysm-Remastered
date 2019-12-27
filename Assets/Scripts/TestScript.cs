@@ -7,13 +7,33 @@ using static DataStructure;
 class Main : MonoBehaviour
 {
     DataLoadScript load = new DataLoadScript();
-    DataStructure refdata;
+    DataStructure data;//this is referance, editing directly is possible
     void Initialize()
     {
+        load.MaterialList.Add(() =>
+        {
+            Map.Material material = new Map.Material();
+            material.CodeName = @"main/material/none";
+            material.Name["KOR"] = "없음";
+            material.Name["ENG"]= "None";
+            material.Explanation["KOR"] = "재료 없음";
+            material.Explanation["ENG"] = "No Material";
+            return material;
+        });
+        load.MaterialList.Add(() =>
+        {
+            Map.Material material = new Map.Material();
+            material.CodeName = @"main/material/wood";
+            material.Name["KOR"] = "나무";
+            material.Name["ENG"] = "Wood";
+            material.Explanation["KOR"] = "불에 잘타는 나무";
+            return material;
+        });
+
+        //Material load end
 
         load.TileList.Add(() =>
         {
-
             Map.Tile tile = new Map.Tile();
             tile.CodeName = @"main/tile/floor/empty";
             tile.Name["KOR"] = "빈칸";
@@ -24,14 +44,13 @@ class Main : MonoBehaviour
             tile.DeathHelp["ENG"] = "help when died by this tile";
             tile.ImagePath = @"main\graphic\tile\floor\empty.png";
             tile.Priority = Drawable.EPriority.Floor;
-            tile.Attribute.Add("PlayerPassable",true);
+            tile.Attribute.Add("PlayerPassable", true);
             tile.Attribute.Add("LightPassable", true);
-            tile.TileEvent.Add("Update", () =>
+            tile.Event.Add("Update", () =>
             {
 
             });
-
-            tile.TileEvent.Add("PlayerOnTile", () =>
+            tile.Event.Add("PlayerOnTile", () =>
             {
 
             });
@@ -39,7 +58,6 @@ class Main : MonoBehaviour
         });
         load.TileList.Add(() =>
         {
-
             Map.Tile tile = new Map.Tile();
             tile.CodeName = @"main/tile/floor/grass";
             tile.Name["KOR"] = "잔디";
@@ -51,5 +69,7 @@ class Main : MonoBehaviour
             tile.Attribute.Add("LightPassable", true);
             return tile;
         });
+
+        //Tile load end
     }
 }

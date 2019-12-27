@@ -65,6 +65,7 @@ public class DataStructure : MonoBehaviour
     {
         public CodeStructure<Map.Tile> TileStorage = new CodeStructure<Map.Tile>();
         public CodeStructure<Map.Item> ItemStorage = new CodeStructure<Map.Item>();
+        public CodeStructure<Map.Material> MaterialStorage = new CodeStructure<Map.Material>();
         public Dictionary<string, Sprite> ImageStorage = new Dictionary<string, Sprite>(); 
     }
     public class CodeObject
@@ -78,7 +79,7 @@ public class DataStructure : MonoBehaviour
             Floor = 0,
             Wall = 1000,
             Window = 2000,
-            장식물 = 3000,
+            Decoration = 3000,
             Unit = 4000
         }
         public enum EDirection
@@ -153,11 +154,12 @@ public class DataStructure : MonoBehaviour
             public LangString Name = new LangString();
             public LangString Explanation = new LangString();
             public LangString DeathHelp = new LangString();
-            public Dictionary<string, Action> TileEvent = new Dictionary<string, Action>();
+            public Dictionary<string, Action> Event = new Dictionary<string, Action>();
             public Dictionary<string,object> Attribute = new Dictionary<string, object>();
+            public Material BaseMaterial = new Material();
 
 
-            public class CTileAttribute
+            public class CTileAttribute//not used
             {
                 public bool PlayerPassable = true;
                 public bool LightPassable = true;
@@ -195,30 +197,33 @@ public class DataStructure : MonoBehaviour
                 else return false;
             }
         }
+        public class Material : CodeObject
+        {
+            public LangString Name = new LangString();
+            public LangString Explanation = new LangString();
+            public Dictionary<string, Action> Event = new Dictionary<string, Action>();
+            public Dictionary<string, object> Attribute = new Dictionary<string, object>();
+        }
 
         public class Item : Drawable
         {
             public string Name;
             public LangString Explanation = new LangString();
             public string DeathHelp;
-            public CItemAttribute Attribute = new CItemAttribute();
-            public CMaterial Material = new CMaterial();
-            public CItemEvent ItemEvent = new CItemEvent();
+            
+            public Material Material = new Material();
+            public Dictionary<string, Action> Event = new Dictionary<string, Action>();
+            public Dictionary<string, object> Attribute = new Dictionary<string, object>();
 
-            public class CItemAttribute
+            public class CItemAttribute//not used
             {
                 public bool IsFireAble;
                 public int BurnTime;
                 public int BurnStrength;
             }
-            public class CMaterial
-            {
-                public string Name;
-                public CItemAttribute Attribute = new CItemAttribute();
-                public CItemEvent ItemEvent = new CItemEvent();
-            }
+            
 
-            public class CItemEvent
+            public class CItemEvent//not used
             {
 
             }
@@ -232,6 +237,7 @@ public class DataStructure : MonoBehaviour
 public class DataLoadScript
 {
     public List<Func<DataStructure.Map.Tile>> TileList = new List<Func<DataStructure.Map.Tile>>();
+    public List<Func<DataStructure.Map.Material>> MaterialList = new List<Func<DataStructure.Map.Material>>();
 }
 
 
