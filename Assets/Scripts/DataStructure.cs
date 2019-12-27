@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 using System.IO;
+using System.Dynamic;
 
 public class DataStructure : MonoBehaviour
 {
@@ -63,7 +64,8 @@ public class DataStructure : MonoBehaviour
     public class CStorage
     {
         public CodeStructure<Map.Tile> TileStorage = new CodeStructure<Map.Tile>();
-        public Dictionary<string, Sprite> ImageStorage = new Dictionary<string, Sprite>();
+        public CodeStructure<Map.Item> ItemStorage = new CodeStructure<Map.Item>();
+        public Dictionary<string, Sprite> ImageStorage = new Dictionary<string, Sprite>(); 
     }
     public class CodeObject
     {
@@ -88,12 +90,12 @@ public class DataStructure : MonoBehaviour
         }
         public enum EShape
         {
-            단칸,
-            꽉참,
-            직각,
-            직선,
-            한개,
-            세개
+            Single,
+            Full,
+            Degree90,
+            Straight,
+            One,
+            Three
         }
         public bool IsShapedImage = false;
         public string ImagePath;
@@ -101,38 +103,6 @@ public class DataStructure : MonoBehaviour
         public EPriority Priority;
         public EShape Shape;
         public EDirection Direction;
-    }
-    public class ItemRelated
-    {
-
-        
-        public class Item
-        {
-            public string Name;
-            public LangString Explanation = new LangString();
-            public string DeathHelp;
-            public CItemAttribute Attribute = new CItemAttribute();
-            public CMaterial Material = new CMaterial();
-            public CItemEvent TileEvent = new CItemEvent();
-
-            public class CItemAttribute
-            {
-
-            }
-            public class CMaterial
-            {
-
-            }
-
-            public class CItemEvent
-            {
-
-            }
-        }
-        public class ItemContainer
-        {
-
-        }
     }
     public class Map
     {
@@ -180,11 +150,11 @@ public class DataStructure : MonoBehaviour
         }
         public class Tile : Drawable
         {
-            public string Name;
+            public LangString Name = new LangString();
             public LangString Explanation = new LangString();
-            public string DeathHelp;
-            public CTileAttribute Attribute = new CTileAttribute();
-            public CTileEvent TileEvent = new CTileEvent();
+            public LangString DeathHelp = new LangString();
+            public Dictionary<string, Action> TileEvent = new Dictionary<string, Action>();
+            public Dictionary<string,object> Attribute = new Dictionary<string, object>();
 
 
             public class CTileAttribute
@@ -193,11 +163,6 @@ public class DataStructure : MonoBehaviour
                 public bool LightPassable = true;
             }
 
-            public class CTileEvent
-            {
-                public Action PlayerOnTile;
-                public Action Update;
-            }
 
 
         }
@@ -230,31 +195,74 @@ public class DataStructure : MonoBehaviour
                 else return false;
             }
         }
+
+        public class Item : Drawable
+        {
+            public string Name;
+            public LangString Explanation = new LangString();
+            public string DeathHelp;
+            public CItemAttribute Attribute = new CItemAttribute();
+            public CMaterial Material = new CMaterial();
+            public CItemEvent ItemEvent = new CItemEvent();
+
+            public class CItemAttribute
+            {
+                public bool IsFireAble;
+                public int BurnTime;
+                public int BurnStrength;
+            }
+            public class CMaterial
+            {
+                public string Name;
+                public CItemAttribute Attribute = new CItemAttribute();
+                public CItemEvent ItemEvent = new CItemEvent();
+            }
+
+            public class CItemEvent
+            {
+
+            }
+        }
+        public class ItemContainer
+        {
+
+        }
     }
 }
 public class DataLoadScript
 {
     public List<Func<DataStructure.Map.Tile>> TileList = new List<Func<DataStructure.Map.Tile>>();
 }
+
+
 public class LangString
 {
-    public enum Language
-    {
-        Kr,
-        En
-    }
-    private Dictionary<Language, string> data = new Dictionary<Language, string>();
+    private Dictionary<string, string> data = new Dictionary<string, string>();
 
-    public static List<Language> CurrentLanguage = new List<Language>();
+    public static List<string> CurrentLanguage = new List<string>();
 
-    public void SetString(string str, Language lang)
+
+
+    public string this[string lang]
     {
-        this.data.Add(lang,str);
+        get
+        {
+            return data[lang];
+        }
+        set
+        {
+            string str;
+            if(data.TryGetValue(lang, out str))
+                data[lang] = value;
+            else
+                data.Add(lang, value);
+            
+        }
     }
 
     public static implicit operator string(LangString langstr)
     {
-        foreach(Language lang in CurrentLanguage)
+        foreach(string lang in CurrentLanguage)
         {
             if(langstr.data[lang] != null)
             {

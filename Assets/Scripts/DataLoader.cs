@@ -103,9 +103,9 @@ public class DataLoader : MonoBehaviour
         string str = File.ReadAllText(Path.Combine(ModFolderPath,"Script.cs"));
         ScriptType type = domain.CompileAndLoadMainSource(str,ScriptSecurityMode.EnsureSecurity);
         ScriptProxy proxy = type.CreateInstance(new GameObject());
+        proxy.SafeFields["data"] = maindata;
         proxy.SafeCall("Initialize");
-
-        DataLoadScript loader = proxy.SafeFields["data"] as DataLoadScript;
+        DataLoadScript loader = proxy.SafeFields["load"] as DataLoadScript;
         DataLoadScriptLoader.Load(loader,ref maindata,this);
     }
 
@@ -151,13 +151,13 @@ public class DataLoader : MonoBehaviour
 }
 public static class DataLoadScriptLoader
 {
-    public static void Load(DataLoadScript dls,ref DataStructure maindata, DataLoader dataloader)
+    public static void Load(DataLoadScript loader,ref DataStructure maindata, DataLoader dataloader)
     {
-        foreach (Func<DataStructure.Map.Tile> 타일로드 in dls.TileList)
+        foreach (Func<DataStructure.Map.Tile> tileload in loader.TileList)
         {
-            DataStructure.Map.Tile 타일1 = 타일로드();
-            maindata.data.TileStorage.Add(타일1);
-            dataloader.ImageLoad(타일1, maindata);
+            DataStructure.Map.Tile tile1 = tileload();
+            maindata.data.TileStorage.Add(tile1);
+            dataloader.ImageLoad(tile1, maindata);
         }
 
 

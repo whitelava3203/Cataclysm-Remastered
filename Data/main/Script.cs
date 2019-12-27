@@ -6,58 +6,51 @@ using static DataStructure;
 
 class Main : MonoBehaviour
 {
-    DataLoadScript data = new DataLoadScript();
-    
+    DataLoadScript load = new DataLoadScript();
+    DataStructure data;//this is ref
     void Initialize()
     {
-
-        data.TileList.Add(() =>
+		
+        load.TileList.Add(() =>
         {
 
             Map.Tile tile = new Map.Tile();
             tile.CodeName = @"main/tile/floor/empty";
-            tile.Name = "빈칸";
-            tile.Explanation.SetString("누르면 뜨는 설명",LangString.Language.Kr);
-            tile.DeathHelp = "이타일효과로 뒤졌을때 뜨는 도움말";
+            tile.Name["KOR"] = "빈칸";
+            tile.Name["ENG"] = "Empty";
+            tile.Explanation["KOR"] = "설명";
+            tile.Explanation["ENG"] = "explain";
+            tile.DeathHelp["KOR"] = "이타일효과로 뒤졌을때 뜨는 도움말";
+            tile.DeathHelp["ENG"] = "help when died by this tile";
             tile.ImagePath = @"main\graphic\tile\floor\empty.png";
             tile.Priority = Drawable.EPriority.Floor;
-            tile.Attribute.PlayerPassable = true;
-            tile.Attribute.LightPassable = true;
-
-
-            tile.TileEvent.Update = () =>
+            tile.Attribute.Add("PlayerPassable",true);
+            tile.Attribute.Add("LightPassable", true);
+            tile.TileEvent.Add("Update", () =>
             {
 
-            };
-            tile.TileEvent.PlayerOnTile = () =>
+            });
+
+            tile.TileEvent.Add("PlayerOnTile", () =>
             {
 
-            };
+            });
             return tile;
         });
-		data.TileList.Add(() =>
+        load.TileList.Add(() =>
         {
 
             Map.Tile tile = new Map.Tile();
             tile.CodeName = @"main/tile/floor/grass";
-            tile.Name = "잔디";
-            tile.Explanation.SetString("누르면 뜨는 설명",LangString.Language.Kr);
-            tile.DeathHelp = "이타일효과로 뒤졌을때 뜨는 도움말";
+            tile.Name["KOR"] = "잔디";
+            tile.Explanation["KOR"] = "설명";
+            tile.DeathHelp["KOR"] = "이타일효과로 뒤졌을때 뜨는 도움말";
             tile.ImagePath = @"main\graphic\tile\floor\grass.png";
             tile.Priority = Drawable.EPriority.Floor;
-            tile.Attribute.PlayerPassable = true;
-            tile.Attribute.LightPassable = true;
-
-
-            tile.TileEvent.Update = () =>
-            {
-
-            };
-            tile.TileEvent.PlayerOnTile = () =>
-            {
-
-            };
+            tile.Attribute.Add("PlayerPassable", true);
+            tile.Attribute.Add("LightPassable", true);
             return tile;
         });
+		refer.da = 6974;
     }
 }
