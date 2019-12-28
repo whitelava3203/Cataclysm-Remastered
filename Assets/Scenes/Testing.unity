@@ -133,6 +133,7 @@ GameObject:
   - component: {fileID: 1050862684}
   - component: {fileID: 1050862683}
   - component: {fileID: 1050862686}
+  - component: {fileID: 1050862687}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -217,4 +218,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b390f3eba1a941045b48d72eb016a27a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ModPath: 
+  CurrentPath: C:\Users\whitelava3203\Documents\Cataclysm
+--- !u!114 &1050862687
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1050862682}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f7324836a1170c4496e93a44d56c655, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

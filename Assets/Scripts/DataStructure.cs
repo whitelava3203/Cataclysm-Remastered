@@ -48,7 +48,7 @@ public class DataStructure : MonoBehaviour
     }
     public interface IntPos
     {
-        bool CheckPos(int x, int y);
+        bool CheckPos(Vector2 pos);
     }
 
 
@@ -121,27 +121,25 @@ public class DataStructure : MonoBehaviour
         public class ChunkContainer : IntPos
         {
             public Chunk Data;
-            public int X;
-            public int Y;
+            public Vector2 Position;
 
             public ChunkContainer()
             {
 
-            }
+            }       
             public ChunkContainer(Chunk chunk1)
             {
                 Data = chunk1;
             }
-            public ChunkContainer(Chunk chunk1, int x, int y)
+            public ChunkContainer(Chunk chunk1, Vector2 pos)
             {
                 Data = chunk1;
-                X = x;
-                Y = y;
+                Position = pos;
             }
 
-            public bool CheckPos(int x, int y)
+            public bool CheckPos(Vector2 pos)
             {
-                if (x == X && y == Y) return true;
+                if (pos==Position) return true;
                 else return false;
             }
         }
@@ -170,8 +168,7 @@ public class DataStructure : MonoBehaviour
         public class TileContainer : IntPos
         {
             public Map.Tile Data;
-            public int X;
-            public int Y;
+            public Vector2 Position;
 
             public bool IsUpdated = false;
             public bool IsDeleted = false;
@@ -184,15 +181,14 @@ public class DataStructure : MonoBehaviour
             {
                 Data = tile1;
             }
-            public TileContainer(Map.Tile tile1, int x, int y)
+            public TileContainer(Map.Tile tile1, Vector2 pos)
             {
                 Data = tile1;
-                X = x;
-                Y = y;
+                Position = pos;
             }
-            public bool CheckPos(int x, int y)
+            public bool CheckPos(Vector2 pos)
             {
-                if (x == X && y == Y) return true;
+                if (pos == Position) return true;
                 else return false;
             }
         }
