@@ -37,14 +37,14 @@ public class WorldGen : MonoBehaviour
     public List<List<EChunkType>> Map = new List<List<EChunkType>>();
     public class CWorldInformation
     {
-        public int RandSeed = 3203;
+        public int RandSeed = 32031;
         public int XSize = 180;
         public int YSize = 180;
-        public int CItySize = 9;
-        public int TownSize = 4;
+        public int CItySize = 10;
+        public int TownSize = 5;
         public int StreetDensity = 35;
-        public int CityCount = 10;
-        public int TownCount = 15;
+        public int CityCount = 20;
+        public int TownCount = 25;
         public int EndCount = 20;
     }
 
@@ -109,8 +109,8 @@ public class WorldGen : MonoBehaviour
         for (int i = 0; i < info.CityCount; i++)
         {
             back1:
-            n[0] = Random.Range(0 + 40, info.XSize - 40+1);
-            n[1] = Random.Range(0 + 40, info.YSize - 40+1);
+            n[0] = Random.Range(0 + 30, info.XSize - 30+1);
+            n[1] = Random.Range(0 + 30, info.YSize - 30+1);
             
             
             if (Map[n[0]][n[1]] != EChunkType.None || CheckExist(n[0] - 5, n[0] + 5, n[1] - 5,n[1]+5,tl))
@@ -126,8 +126,8 @@ public class WorldGen : MonoBehaviour
         for (int i = 0; i < info.TownCount; i++)
         {
             back1:
-            n[0] = Random.Range(0 + 33, info.XSize - 33+1);
-            n[1] = Random.Range(0 + 33, info.YSize - 33+1);
+            n[0] = Random.Range(0 + 25, info.XSize - 25+1);
+            n[1] = Random.Range(0 + 25, info.YSize - 25+1);
             if (Map[n[0]][n[1]] != EChunkType.None || CheckExist(n[0] - 5, n[0] + 5, n[1] - 5, n[1] + 5, tl))
             {
                 goto back1;
@@ -234,6 +234,9 @@ public class WorldGen : MonoBehaviour
             }
         }
         //도시 생성 완료
+
+        //마을 생성 스킵
+
 
 
 
