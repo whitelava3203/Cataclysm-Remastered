@@ -2,6 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using static MainData;
+
+public class Mod_ChunkMaker : MonoBehaviour
+{
+    public enum EState
+    {
+        Tile,
+        Chunk
+    }
+}
 /*
 public class Mod_ChunkMaker : MonoBehaviour
 {

@@ -25,7 +25,7 @@ public class MainData : MonoBehaviour
 
     public void SetPlayer()
     {
-        플레이어.정보.GetComponent<PlayerController>().Data = new 플레이어();
+        //플레이어.정보.GetComponent<PlayerController>().Data = new 플레이어();
     }
     public void LoadResources()
     {
