@@ -7,48 +7,10 @@ using System.Dynamic;
 
 public class DataStructure : MonoBehaviour
 {
-    public class CodeStructure<T> where T : CodeObject
-    {
-        private Dictionary<string, T> data = new Dictionary<string, T>();
-        private List<string> codedata = new List<string>();
-        public T this[int index]
-        {
-            get
-            {
-                return data[codedata[index]];
-            }
-            set
-            {
-                data[codedata[index]] = value;
-            }
-        }
-        public T this[string key]
-        {
-            get
-            {
-                return data[key];
-            }
-            set
-            {
-                data[key] = value;
-            }
-        }
-        public void Add(T obj)
-        {
-            this.data.Add(obj.CodeName,obj);
-            this.codedata.Add(obj.CodeName);
-        }
-       public void Clear()
-       {
-            this.data.Clear();
-            this.codedata.Clear();
-       }
-
-
-    }
+    
     public interface IntPos
     {
-        bool CheckPos(Vector2 pos);
+        bool CheckPos(Vector2Int pos);
     }
 
 
@@ -68,43 +30,7 @@ public class DataStructure : MonoBehaviour
         public CodeStructure<Map.Material> MaterialStorage = new CodeStructure<Map.Material>();
         public Dictionary<string, Sprite> ImageStorage = new Dictionary<string, Sprite>(); 
     }
-    public class CodeObject
-    {
-        public string CodeName;
-    }
-    public class Drawable : CodeObject
-    {
-        public enum EPriority
-        {
-            Floor = 0,
-            Wall = 1000,
-            Window = 2000,
-            Decoration = 3000,
-            Unit = 4000
-        }
-        public enum EDirection
-        {
-            Straight,
-            Clockwise90,
-            Clockwise180,
-            Clockwise270
-        }
-        public enum EShape
-        {
-            Single,
-            Full,
-            Degree90,
-            Straight,
-            One,
-            Three
-        }
-        public bool IsShapedImage = false;
-        public string ImagePath;
-        public double ImageSize;
-        public EPriority Priority;
-        public EShape Shape;
-        public EDirection Direction;
-    }
+    
     public class Map
     {
         public class CWorld
@@ -121,7 +47,7 @@ public class DataStructure : MonoBehaviour
         public class ChunkContainer : IntPos
         {
             public Chunk Data;
-            public Vector2 Position;
+            public Vector2Int Position;
 
             public ChunkContainer()
             {
@@ -131,13 +57,13 @@ public class DataStructure : MonoBehaviour
             {
                 Data = chunk1;
             }
-            public ChunkContainer(Chunk chunk1, Vector2 pos)
+            public ChunkContainer(Chunk chunk1, Vector2Int pos)
             {
                 Data = chunk1;
                 Position = pos;
             }
 
-            public bool CheckPos(Vector2 pos)
+            public bool CheckPos(Vector2Int pos)
             {
                 if (pos==Position) return true;
                 else return false;
@@ -162,13 +88,11 @@ public class DataStructure : MonoBehaviour
                 public bool LightPassable = true;
             }
 
-
-
         }
         public class TileContainer : IntPos
         {
             public Map.Tile Data;
-            public Vector2 Position;
+            public Vector2Int Position;
 
             public bool IsUpdated = false;
             public bool IsDeleted = false;
@@ -181,12 +105,12 @@ public class DataStructure : MonoBehaviour
             {
                 Data = tile1;
             }
-            public TileContainer(Map.Tile tile1, Vector2 pos)
+            public TileContainer(Map.Tile tile1, Vector2Int pos)
             {
                 Data = tile1;
                 Position = pos;
             }
-            public bool CheckPos(Vector2 pos)
+            public bool CheckPos(Vector2Int pos)
             {
                 if (pos == Position) return true;
                 else return false;
@@ -272,4 +196,115 @@ public class LangString
         }
         return "EMPTY";
     }
+}
+public class CodeStructure<T> where T : CodeObject
+{
+    private Dictionary<string, T> data = new Dictionary<string, T>();
+    private List<string> codedata = new List<string>();
+    public T this[int index]
+    {
+        get
+        {
+            return data[codedata[index]];
+        }
+        set
+        {
+            data[codedata[index]] = value;
+        }
+    }
+    public T this[string key]
+    {
+        get
+        {
+            return data[key];
+        }
+        set
+        {
+            data[key] = value;
+        }
+    }
+    public void Add(T obj)
+    {
+        this.data.Add(obj.CodeName, obj);
+        this.codedata.Add(obj.CodeName);
+    }
+    public void Clear()
+    {
+        this.data.Clear();
+        this.codedata.Clear();
+    }
+
+
+}
+public class CodeObject
+{
+    public string CodeName;
+}
+public class Drawable : CodeObject
+{
+    public static DataStorage datastorage;
+
+    public enum EPriority
+    {
+        Floor = 0,
+        Wall = 1000,
+        Window = 2000,
+        Decoration = 3000,
+        Unit = 4000
+    }
+    public enum EDirection
+    {
+        Straight,
+        Clockwise90,
+        Clockwise180,
+        Clockwise270
+    }
+    public enum EShape
+    {
+        Single,
+        Full,
+        Degree90,
+        Straight,
+        One,
+        Three
+    }
+    public bool IsShapedImage = false;
+    public string ImagePath;
+    public double ImageSize;
+    public EPriority Priority;
+    public EShape Shape;
+    public EDirection Direction;
+
+    public Sprite Sprite
+    {
+        get
+        {
+            string str;
+            if (this.IsShapedImage == true)
+            {
+                str = this.CodeName + "_" + ((int)this.Shape).ToString();
+            }
+            else
+            {
+                str = this.CodeName;
+            }
+
+            if (datastorage.ImageStorage.ContainsKey(str))
+            {
+                return datastorage.ImageStorage[str];
+            }
+            else
+            {
+                Debug.Log(@"(DataLoader.LoadModList)오류/"+this.CodeName+" 이미지가 로딩되지 않음.");
+                return datastorage.ImageStorage[str];//빈 스프라이트 주는걸로 바꿔야함
+            }
+        }
+    }
+}
+public class DataStorage
+{
+    public CodeStructure<DataStructure.Map.Tile> TileStorage = new CodeStructure<DataStructure.Map.Tile>();
+    public CodeStructure<DataStructure.Map.Item> ItemStorage = new CodeStructure<DataStructure.Map.Item>();
+    public CodeStructure<DataStructure.Map.Material> MaterialStorage = new CodeStructure<DataStructure.Map.Material>();
+    public Dictionary<string, Sprite> ImageStorage = new Dictionary<string, Sprite>();
 }

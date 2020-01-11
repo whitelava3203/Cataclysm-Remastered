@@ -92,7 +92,7 @@ public class DataLoader : MonoBehaviour
         domain = ScriptDomain.CreateDomain("ScriptLoader", initCompiler);
         //byte[] bytearray = File.ReadAllBytes(@"C:\Users\whitelava3203\Documents\Cataclysm\Library\ScriptAssemblies\Assembly-CSharp.dll");
         //domain.LoadAssembly(bytearray,ScriptSecurityMode.EnsureLoad);
-        Debug.Log("(Dataloader.LoadFirstScript)로그/실행성공");
+        Debug.Log(@"(Dataloader.LoadFirstScript)로그/실행성공");
     }
     private void LoadSingleMod(ref DataStructure maindata, string ModFolderPath)
     {
