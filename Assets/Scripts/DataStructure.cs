@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System;
 using UnityEngine;
-using System.IO;
-using System.Dynamic;
+using System.Text;
 
 public class DataStructure : MonoBehaviour
 {
@@ -50,7 +49,7 @@ public class DataStructure : MonoBehaviour
 
         public class Chunk
         {
-            public List<TileContainer> TileList = new List<TileContainer>();
+            public List<TileContainer> TileContainerList = new List<TileContainer>();
 
         }
         public class ChunkContainer : IntPos
@@ -64,16 +63,45 @@ public class DataStructure : MonoBehaviour
             public ChunkContainer(Chunk chunk1)
             {
                 Data = chunk1;
-            }
+            }   
             public ChunkContainer(Chunk chunk1, Vector2Int pos)
             {
                 Data = chunk1;
                 Position = pos;
             }
+            public static string Save(BaseChunk basechunk)
+            {
+                int i=0;int j=0;
+                StringBuilder sb = new StringBuilder();
+                sb.AppendLine("        Load.BaseChunkList.Add(() =>");
+                sb.AppendLine("        {");
+                sb.AppendLine("            Map.BaseChunk basechunk = new Map.BaseChunk();");
+                sb.AppendLine("            Map.ChunkContainer cc;");
+                sb.AppendLine("            Map.TileContainer tc;");
+                sb.AppendLine("            basechunk.CodeName = \"" + basechunk.CodeName + "\";");
+                foreach(ChunkContainer chunkcontainer in basechunk.ChunkContainerList)
+                {
+                    sb.AppendLine("            cc = new Map.ChunkContainer();");
+                    foreach(TileContainer tilecontainer in chunkcontainer.Data.TileContainerList)
+                    {
+                        sb.AppendLine("            tc = new Map.TileContainer();"); 
+                        sb.AppendLine("            tc.Data = Storage.TileStorage[\"" + tilecontainer.Data.CodeName + "\"];");
+                        sb.AppendLine("            tc.Position = new Vector2Int("+tilecontainer.Position.x+", "+ tilecontainer.Position.y+");");
+                        sb.AppendLine("            cc.Data.TileContainerList.Add(tc);");
+                        sb.AppendLine("            //Tile " + j++);
+                    }
+                    sb.AppendLine("            basechunk.ChunkContainerList.Add(cc);");
+                    sb.AppendLine("            //Chunk " + i++);
+                }
+
+                sb.AppendLine("            return basechunk;");
+               
+                return sb.ToString();
+            }
         }
         public class BaseChunk : CodeObject
         {
-
+            public List<ChunkContainer> ChunkContainerList = new List<ChunkContainer>();
         }
         public class Tile : Drawable
         {
@@ -111,6 +139,11 @@ public class DataStructure : MonoBehaviour
                 Data = tile1;
                 Position = pos;
             }
+            public TileContainer(Map.Tile tile1, int x,int y)
+            {
+                Data = tile1;
+                Position = new Vector2Int(x,y);
+            }
         }
         public class Material : CodeObject
         {
@@ -122,26 +155,14 @@ public class DataStructure : MonoBehaviour
 
         public class Item : Drawable
         {
-            public string Name;
+            public LangString Name = new LangString();
             public LangString Explanation = new LangString();
-            public string DeathHelp;
+            public LangString DeathHelp = new LangString();
             
             public Material Material = new Material();
             public Dictionary<string, Action> Event = new Dictionary<string, Action>();
             public Dictionary<string, object> Attribute = new Dictionary<string, object>();
 
-            public class CItemAttribute//not used
-            {
-                public bool IsFireAble;
-                public int BurnTime;
-                public int BurnStrength;
-            }
-            
-
-            public class CItemEvent//not used
-            {
-
-            }
         }
         public class ItemContainer
         {
@@ -247,10 +268,11 @@ public class DrawDictionary<T> : CodeDictionary<T> where T : Drawable
 public class CodeObject
 {
     public string CodeName;
+    public static DataStorage MainStorage;
 }
 public class Drawable : CodeObject
 {
-    public static DataStorage datastorage;
+    //public static DataStorage datastorage;
 
     public enum EPriority
     {
@@ -297,14 +319,14 @@ public class Drawable : CodeObject
                 str = this.CodeName;
             }
 
-            if (datastorage.ImageStorage.ContainsKey(str))
+            if (MainStorage.ImageStorage.ContainsKey(str))
             {
-                return datastorage.ImageStorage[str];
+                return MainStorage.ImageStorage[str];
             }
             else
             {
                 Debug.Log(@"(DataLoader.LoadModList)오류/"+this.CodeName+" 이미지가 로딩되지 않음.");
-                return datastorage.ImageStorage[str];//빈 스프라이트 주는걸로 바꿔야함
+                return MainStorage.ImageStorage[str];//빈 스프라이트 주는걸로 바꿔야함
             }
         }
     }
@@ -326,6 +348,13 @@ public static class BaseObject
         get
         {
             return GameObject.Find("BaseTile");
+        }
+    }
+    public static GameObject Chunk
+    {
+        get
+        {
+            return GameObject.Find("BaseChunk");
         }
     }
 }

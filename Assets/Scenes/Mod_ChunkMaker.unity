@@ -121,6 +121,50 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &88261639
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 88261641}
+  - component: {fileID: 88261640}
+  m_Layer: 0
+  m_Name: BaseChunk
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &88261640
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 88261639}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 833ac881422227c40afba381a801ace0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TileObjectList: []
+--- !u!4 &88261641
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 88261639}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &88462403
 GameObject:
   m_ObjectHideFlags: 0
@@ -309,8 +353,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 1021227010}
+  m_Children: []
   m_Father: {fileID: 1863708974}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -323,11 +366,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1021227010}
-  - component: {fileID: 1021227012}
   - component: {fileID: 1021227011}
   - component: {fileID: 1021227014}
+  - component: {fileID: 1021227012}
   m_Layer: 0
-  m_Name: UnnamedFloor
+  m_Name: BaseTile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -340,12 +383,12 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1021227009}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 3.2, y: 3.2, z: 1}
   m_Children: []
-  m_Father: {fileID: 748022200}
-  m_RootOrder: 0
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -411,7 +454,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1021227009}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 87264c02da92fd9439fd219fc1ba6dfe, type: 3}
+  m_Script: {fileID: 11500000, guid: 8fc68f7621630334bb930f81f46a0c70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!61 &1021227014
@@ -449,7 +492,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1021306030}
-  - component: {fileID: 1021306032}
   - component: {fileID: 1021306031}
   m_Layer: 0
   m_Name: SelectedTile
@@ -527,18 +569,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &1021306032
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1021306029}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 87264c02da92fd9439fd219fc1ba6dfe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1277706229
 GameObject:
   m_ObjectHideFlags: 0
@@ -549,7 +579,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1277706231}
   - component: {fileID: 1277706230}
-  - component: {fileID: 1277706232}
   m_Layer: 0
   m_Name: ChunkMakerController
   m_TagString: Untagged
@@ -587,19 +616,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1277706232
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1277706229}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e7b7715b9b4583742815fdb4a8a0cc81, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  IsSameClicked: 0
 --- !u!1 &1531735848
 GameObject:
   m_ObjectHideFlags: 0
@@ -1037,7 +1053,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1908106185}
   - component: {fileID: 1908106184}
-  - component: {fileID: 1908106183}
   m_Layer: 0
   m_Name: CursorFollower
   m_TagString: Untagged
@@ -1045,18 +1060,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1908106183
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1908106182}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3eec9ff2c6e83384db0a975dfa09a58a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!212 &1908106184
 SpriteRenderer:
   m_ObjectHideFlags: 0

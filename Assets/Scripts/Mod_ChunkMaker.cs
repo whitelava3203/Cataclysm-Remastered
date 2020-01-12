@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static MainData;
+using static DataStructure;
 
 public class Mod_ChunkMaker : MonoBehaviour
 {
@@ -10,11 +10,43 @@ public class Mod_ChunkMaker : MonoBehaviour
         Tile,
         Chunk
     }
-
-
-    void LoadBase()
+    void Start()
     {
+        LangString.CurrentLanguage.Add("KOR");
+        LangString.CurrentLanguage.Add("ENG");
 
+        DataLoader dataloader = new DataLoader();
+        DataStorage mainstorage = new DataStorage();
+        CodeObject.MainStorage = mainstorage;
+
+        dataloader.LoadMods(ref mainstorage);
+        ChunkLoader chunkloader = new ChunkLoader();
+        Debug.Log("(Mod_ChunkMaker.Start)로그/기초 로딩 완료.");
+
+
+
+
+
+        Map.Chunk chunk1 = CreateGrassChunk(mainstorage);
+        Map.ChunkContainer chunkcontainer1 = new Map.ChunkContainer(chunk1,new Vector2Int(0,0));
+        chunkloader.AddChunk(chunkcontainer1);
+    }
+
+    DataStructure.Map.Chunk CreateGrassChunk(DataStorage datastorage)
+    {
+        DataStructure.Map.Chunk chunk1 = new DataStructure.Map.Chunk();
+        for(int i=0;i<24;i++)
+        {
+            for(int j=0;j<24;j++)
+            {
+                DataStructure.Map.TileContainer tilecontainer1 = new DataStructure.Map.TileContainer();
+                tilecontainer1.Data = datastorage.TileStorage["main/tile/floor/grass"];
+                tilecontainer1.Position = new Vector2Int(j,i);
+                chunk1.TileContainerList.Add(tilecontainer1);
+            }
+        }
+
+        return chunk1;
     }
 }
 /*

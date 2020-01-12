@@ -7,7 +7,7 @@ using static DataStructure;
 class Main : MonoBehaviour
 {
     DataLoadScript Load = new DataLoadScript();
-    DataStructure data;//this is ref
+    DataStorage Storage;//this is ref
     void Initialize()
     {
         Load.MaterialList.Add(() =>
@@ -144,6 +144,34 @@ class Main : MonoBehaviour
 
 
 
+        Load.BaseChunkList.Add(() =>
+        {
+            Map.BaseChunk basechunk = new Map.BaseChunk();
+            Map.ChunkContainer cc;
+            Map.TileContainer tc;
+            basechunk.CodeName = "main/basechunk/test";
 
+            cc = new Map.ChunkContainer();
+
+            tc = new Map.TileContainer();
+            tc.Data = Storage.TileStorage["main/tile/floor/grass"];
+            tc.Position = new Vector2Int(0, 0);
+            cc.Data.TileContainerList.Add(tc);
+            //Tile 1
+            tc = new Map.TileContainer();
+            tc.Data = Storage.TileStorage["main/tile/floor/grass"];
+            tc.Position = new Vector2Int(1, 0);
+            cc.Data.TileContainerList.Add(tc);
+            //Tile 2
+            tc = new Map.TileContainer();
+            tc.Data = Storage.TileStorage["main/tile/floor/grass"];
+            tc.Position = new Vector2Int(2, 0);
+            cc.Data.TileContainerList.Add(tc);
+            //Tile 3
+            basechunk.ChunkContainerList.Add(cc);
+            //Chunk 1
+
+            return basechunk;
+        });
     }
 }

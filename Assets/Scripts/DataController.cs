@@ -24,7 +24,7 @@ public class DataController : MonoBehaviour
         if(T == typeof(DataStructure.Map.ChunkContainer))
         {
             DataStructure.Map.ChunkContainer 청크C1 = (DataStructure.Map.ChunkContainer)obj;
-            foreach (DataStructure.Map.TileContainer 타일C1 in 청크C1.Data.TileList)
+            foreach (DataStructure.Map.TileContainer 타일C1 in 청크C1.Data.TileContainerList)
             {
 
             }

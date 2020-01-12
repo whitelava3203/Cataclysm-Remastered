@@ -7,7 +7,7 @@ public class ChunkObjectController : MonoBehaviour
     public List<GameObject> TileObjectList = new List<GameObject>();
     public DataStructure.Map.ChunkContainer Data;
 
-    public void ReloadAllObject(List<DataStructure.Map.TileContainer> tilecontainerlist)
+    public void ReloadAllObjectWith(List<DataStructure.Map.TileContainer> tilecontainerlist)
     {
         TileObjectList = new List<GameObject>();
         foreach(DataStructure.Map.TileContainer tilecontainer in tilecontainerlist)
@@ -17,6 +17,19 @@ public class ChunkObjectController : MonoBehaviour
             obj.GetComponent<TileObjectController>().Syncronize();
             TileObjectList.Add(obj);
         }
+        SyncronizeAll();
+    }
+    public void ReloadAllObject()
+    {
+        TileObjectList = new List<GameObject>();
+        foreach (DataStructure.Map.TileContainer tilecontainer in Data.Data.TileContainerList)
+        {
+            GameObject obj = GameObject.Instantiate(BaseObject.Tile);
+            obj.GetComponent<TileObjectController>().Data = tilecontainer;
+            obj.GetComponent<TileObjectController>().Syncronize();
+            TileObjectList.Add(obj);
+        }
+        SyncronizeAll();
     }
     public void SyncronizeAll()
     {

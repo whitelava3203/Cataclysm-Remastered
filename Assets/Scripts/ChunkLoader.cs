@@ -36,9 +36,9 @@ public class ChunkLoader : MonoBehaviour
     }
     public void AddChunk(DataStructure.Map.ChunkContainer chunkcontainer)
     {
-        GameObject obj = GameObject.Instantiate(BaseObject.Tile);
+        GameObject obj = GameObject.Instantiate(BaseObject.Chunk);
         obj.GetComponent<ChunkObjectController>().Data = chunkcontainer;
-        obj.GetComponent<ChunkObjectController>().SyncronizeAll();
+        obj.GetComponent<ChunkObjectController>().ReloadAllObject();
         ChunkObjectList.Add(obj);
     }
     public void AddChunkList(List<DataStructure.Map.ChunkContainer> chunkcontainerlist)

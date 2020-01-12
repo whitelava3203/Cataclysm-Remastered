@@ -18,12 +18,10 @@ public class DataLoader : MonoBehaviour
         
     public List<DirectoryInfo> ModFolderDiList = new List<DirectoryInfo>();
 
-    void Start()
+    public void LoadMods(ref DataStorage datastorage)
     {
         Debug.Log(System.Environment.CurrentDirectory);
-        DataStructure maindata = new DataStructure();
-        DataStorage mainstorage = new DataStorage();
-        LoadMod(ref mainstorage);
+        LoadMod(ref datastorage);
     }
     private List<string> LoadModList()
     {
@@ -64,7 +62,7 @@ public class DataLoader : MonoBehaviour
         return new List<String>();
     }
 
-    public void LoadMod(ref DataStorage maindata)
+    private void LoadMod(ref DataStorage maindata)
     {
         List<string> ModFolderPathList = LoadModList();
         foreach(string ModFolderPath in ModFolderPathList)
