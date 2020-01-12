@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.IO;
+using System.IO.Compression;
 using RoslynCSharp;
+using System.Text;
 
 public class DataLoader : MonoBehaviour
 {
@@ -95,7 +97,23 @@ public class DataLoader : MonoBehaviour
         {
             LoadFirstScript();
         }
-        string str = File.ReadAllText(Path.Combine(ModFolderPath,"Script.cs"));
+        string path1 = Path.Combine(ModFolderPath, "Script.cs");
+        string path2 = Path.Combine(ModFolderPath, "Script.zip");
+        string str="";
+        if (!File.Exists(path2))
+        {
+            str = UnZip(File.ReadAllText(path2));
+        }
+        else if(!File.Exists(path1))
+        {
+            str = File.ReadAllText(path1);
+        }
+        else
+        {
+            Debug.Log(@"(DataLoader.LoadSingleMod)오류/"+path1+ " 스크립트 파일을 찾을수 없습니다.");
+        }
+        
+        
         ScriptType type = domain.CompileAndLoadMainSource(str,ScriptSecurityMode.EnsureSecurity);
         ScriptProxy proxy = type.CreateInstance(new GameObject());
         proxy.SafeFields["data"] = mainstorage;
@@ -103,7 +121,38 @@ public class DataLoader : MonoBehaviour
         DataLoadScript loader = proxy.SafeFields["load"] as DataLoadScript;
         DataLoadScriptLoader.Load(loader,ref mainstorage,this);
     }
+    private string Zip(string str)
+    {
+        var rowData = Encoding.UTF8.GetBytes(str);
+        byte[] compressed = null;
+        using (var outStream = new MemoryStream())
+        {
+            using (var hgs = new GZipStream(outStream, CompressionMode.Compress))
+            {
+                //outStream에 압축을 시킨다.
+                hgs.Write(rowData, 0, rowData.Length);
+            }
+            compressed = outStream.ToArray();
+        }
 
+        return Convert.ToBase64String(compressed);
+    }
+    private string UnZip(string str)
+    {
+        string output = null;
+        byte[] cmpData = Convert.FromBase64String(str);
+        using (var decomStream = new MemoryStream(cmpData))
+        {
+            using (var hgs = new GZipStream(decomStream, CompressionMode.Decompress))
+            {
+                using (var reader = new StreamReader(hgs))
+                {
+                    output = reader.ReadToEnd();
+                }
+            }
+        }
+        return output;
+    }
     public Sprite ImageLoad(Drawable drawobj, ref DataStorage mainstorage)
     {
         string str;

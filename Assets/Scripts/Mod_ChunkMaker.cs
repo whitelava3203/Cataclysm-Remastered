@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
 using static DataStructure;
 
 public class Mod_ChunkMaker : MonoBehaviour
@@ -10,6 +11,15 @@ public class Mod_ChunkMaker : MonoBehaviour
         Tile,
         Chunk
     }
+    public enum EBrushType
+    {
+        None,
+        Pencil,
+        Line,
+        Ractangle,
+    }
+    public Map.Tile selectedtile = new Map.Tile();
+    public List<Map.Tile> palletetilelist = new List<Map.Tile>();
     void Start()
     {
         LangString.CurrentLanguage.Add("KOR");
@@ -30,6 +40,10 @@ public class Mod_ChunkMaker : MonoBehaviour
         Map.Chunk chunk1 = CreateGrassChunk(mainstorage);
         Map.ChunkContainer chunkcontainer1 = new Map.ChunkContainer(chunk1,new Vector2Int(0,0));
         chunkloader.AddChunk(chunkcontainer1);
+        Map.BaseChunk bc1 = new Map.BaseChunk();
+        bc1.ChunkContainerList.Add(chunkcontainer1);
+        string str = Map.ChunkContainer.Save(bc1);
+        File.WriteAllText(@"C:\Users\whitelava3203\Documents\Cataclysm\asd.cs", str);
     }
 
     DataStructure.Map.Chunk CreateGrassChunk(DataStorage datastorage)
