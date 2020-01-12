@@ -10,6 +10,12 @@ public class Mod_ChunkMaker : MonoBehaviour
         Tile,
         Chunk
     }
+
+
+    void LoadBase()
+    {
+
+    }
 }
 /*
 public class Mod_ChunkMaker : MonoBehaviour

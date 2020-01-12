@@ -5,8 +5,19 @@ using UnityEngine;
 public class ChunkObjectController : MonoBehaviour
 {
     public List<GameObject> TileObjectList = new List<GameObject>();
-    public DataStructure.Map.ChunkContainer data;
+    public DataStructure.Map.ChunkContainer Data;
 
+    public void ReloadAllObject(List<DataStructure.Map.TileContainer> tilecontainerlist)
+    {
+        TileObjectList = new List<GameObject>();
+        foreach(DataStructure.Map.TileContainer tilecontainer in tilecontainerlist)
+        {
+            GameObject obj = GameObject.Instantiate(BaseObject.Tile);
+            obj.GetComponent<TileObjectController>().Data = tilecontainer;
+            obj.GetComponent<TileObjectController>().Syncronize();
+            TileObjectList.Add(obj);
+        }
+    }
     public void SyncronizeAll()
     {
         foreach(GameObject tileobj in TileObjectList)

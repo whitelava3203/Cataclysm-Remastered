@@ -24,6 +24,7 @@ public class TileObjectController : MonoBehaviour
     public void Syncronize()
     {
         this.sprite = Data.Data.Sprite;
+        this.transform.position = Data.FixedPosition;
     }
     // Start is called before the first frame update
     void Start()

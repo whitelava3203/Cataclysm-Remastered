@@ -22,7 +22,7 @@ public class ChunkLoader : MonoBehaviour
     {
         foreach(GameObject chunkobj in ChunkObjectList)
         {
-            bool b = Vector2.Distance(chunkobj.GetComponent<ChunkObjectController>().data.Position, position) < radius;
+            bool b = Vector2.Distance(chunkobj.GetComponent<ChunkObjectController>().Data.Position, position) < radius;
             if (b && chunkobj.activeSelf == false)
             {
                 chunkobj.SetActive(true);
@@ -33,5 +33,16 @@ public class ChunkLoader : MonoBehaviour
             }
             
         }
+    }
+    public void AddChunk(DataStructure.Map.ChunkContainer chunkcontainer)
+    {
+        GameObject obj = GameObject.Instantiate(BaseObject.Tile);
+        obj.GetComponent<ChunkObjectController>().Data = chunkcontainer;
+        obj.GetComponent<ChunkObjectController>().SyncronizeAll();
+        ChunkObjectList.Add(obj);
+    }
+    public void AddChunkList(List<DataStructure.Map.ChunkContainer> chunkcontainerlist)
+    {
+        chunkcontainerlist.ForEach((chunkcontainer) => { AddChunk(chunkcontainer); });
     }
 }

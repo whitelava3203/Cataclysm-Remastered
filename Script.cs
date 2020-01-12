@@ -6,11 +6,11 @@ using static DataStructure;
 
 class Main : MonoBehaviour
 {
-    DataLoadScript load = new DataLoadScript();
+    DataLoadScript Load = new DataLoadScript();
     DataStructure data;//this is ref
     void Initialize()
     {
-        load.MaterialList.Add(() =>
+        Load.MaterialList.Add(() =>
         {
             Map.Material material = new Map.Material();
             material.CodeName = @"main/material/none";
@@ -20,7 +20,7 @@ class Main : MonoBehaviour
             material.Explanation["ENG"] = "No Material";
             return material;
         });
-        load.MaterialList.Add(() =>
+        Load.MaterialList.Add(() =>
         {
             Map.Material material = new Map.Material();
             material.CodeName = @"main/material/wood";
@@ -30,9 +30,9 @@ class Main : MonoBehaviour
             return material;
         });
 
-        //Material load end
+        //Material Load end
 
-        load.TileList.Add(() =>
+        Load.TileList.Add(() =>
         {
             Map.Tile tile = new Map.Tile();
             tile.CodeName = @"main/tile/floor/empty";
@@ -56,7 +56,7 @@ class Main : MonoBehaviour
             });
             return tile;
         });
-        load.TileList.Add(() =>
+        Load.TileList.Add(() =>
         {
             Map.Tile tile = new Map.Tile();
             tile.CodeName = @"main/tile/floor/grass";
@@ -70,7 +70,7 @@ class Main : MonoBehaviour
             tile.Attribute.Add("MovingResistance", 0);
             return tile;
         });
-        load.TileList.Add(() =>
+        Load.TileList.Add(() =>
         {
             Map.Tile tile = new Map.Tile();
             tile.CodeName = @"main/tile/floor/concrete";
@@ -84,7 +84,7 @@ class Main : MonoBehaviour
             tile.Attribute.Add("MovingResistance", 0);
             return tile;
         });
-        load.TileList.Add(() =>
+        Load.TileList.Add(() =>
         {
             Map.Tile tile = new Map.Tile();
             tile.CodeName = @"main/tile/wall/concrete";
@@ -98,7 +98,7 @@ class Main : MonoBehaviour
             tile.Attribute.Add("LightPassable", false);
             return tile;
         });
-        load.TileList.Add(() =>
+        Load.TileList.Add(() =>
         {
             Map.Tile tile = new Map.Tile();
             tile.CodeName = @"main/tile/window/windowstatic";
@@ -111,7 +111,7 @@ class Main : MonoBehaviour
             tile.Attribute.Add("LightPassable", true);
             return tile;
         });
-        load.TileList.Add(() =>
+        Load.TileList.Add(() =>
         {
             Map.Tile tile = new Map.Tile();
             tile.CodeName = @"main/tile/window/windowclosed";
@@ -124,7 +124,7 @@ class Main : MonoBehaviour
             tile.Attribute.Add("LightPassable", true);
             return tile;
         });
-        load.TileList.Add(() =>
+        Load.TileList.Add(() =>
         {
             Map.Tile tile = new Map.Tile();
             tile.CodeName = @"main/tile/window/windowopened";
@@ -140,6 +140,10 @@ class Main : MonoBehaviour
         });
 
 
-        //Tile load end
+        //Tile Load end
+
+
+
+
     }
 }

@@ -4,10 +4,6 @@ using UnityEngine;
 using System;
 using System.IO;
 using RoslynCSharp;
-using UnityEditor;
-using System.Reflection;
-using System.Runtime.Serialization.Formatters.Binary;
-using static DataStructure;
 
 public class DataLoader : MonoBehaviour
 {
@@ -26,7 +22,8 @@ public class DataLoader : MonoBehaviour
     {
         Debug.Log(System.Environment.CurrentDirectory);
         DataStructure maindata = new DataStructure();
-        LoadMod(ref maindata);
+        DataStorage mainstorage = new DataStorage();
+        LoadMod(ref mainstorage);
     }
     private List<string> LoadModList()
     {
@@ -67,7 +64,7 @@ public class DataLoader : MonoBehaviour
         return new List<String>();
     }
 
-    public void LoadMod(ref DataStructure maindata)
+    public void LoadMod(ref DataStorage maindata)
     {
         List<string> ModFolderPathList = LoadModList();
         foreach(string ModFolderPath in ModFolderPathList)
@@ -94,7 +91,7 @@ public class DataLoader : MonoBehaviour
         //domain.LoadAssembly(bytearray,ScriptSecurityMode.EnsureLoad);
         Debug.Log(@"(Dataloader.LoadFirstScript)로그/실행성공");
     }
-    private void LoadSingleMod(ref DataStructure maindata, string ModFolderPath)
+    private void LoadSingleMod(ref DataStorage mainstorage, string ModFolderPath)
     {
         if (initCompiler == false)
         {
@@ -103,13 +100,13 @@ public class DataLoader : MonoBehaviour
         string str = File.ReadAllText(Path.Combine(ModFolderPath,"Script.cs"));
         ScriptType type = domain.CompileAndLoadMainSource(str,ScriptSecurityMode.EnsureSecurity);
         ScriptProxy proxy = type.CreateInstance(new GameObject());
-        proxy.SafeFields["data"] = maindata;
+        proxy.SafeFields["data"] = mainstorage;
         proxy.SafeCall("Initialize");
         DataLoadScript loader = proxy.SafeFields["load"] as DataLoadScript;
-        DataLoadScriptLoader.Load(loader,ref maindata,this);
+        DataLoadScriptLoader.Load(loader,ref mainstorage,this);
     }
 
-    public Sprite ImageLoad(Drawable drawobj, DataStructure maindata)
+    public Sprite ImageLoad(Drawable drawobj, ref DataStorage mainstorage)
     {
         string str;
         string str2;
@@ -125,9 +122,9 @@ public class DataLoader : MonoBehaviour
         }
         str2 = Path.Combine(this.ModPath, str2);
 
-        if (maindata.data.ImageStorage.ContainsKey(str))
+        if (mainstorage.ImageStorage.ContainsKey(str))
         {
-            return maindata.data.ImageStorage[str];
+            return mainstorage.ImageStorage[str];
         }
         else
         {
@@ -142,7 +139,7 @@ public class DataLoader : MonoBehaviour
             }
             else
             {
-                maindata.data.ImageStorage.Add(str, spr);
+                mainstorage.ImageStorage.Add(str, spr);
                 return spr;
             }
         }
@@ -151,20 +148,21 @@ public class DataLoader : MonoBehaviour
 }
 public static class DataLoadScriptLoader
 {
-    public static void Load(DataLoadScript loader,ref DataStructure maindata, DataLoader dataloader)
+    public static void Load(DataLoadScript loader,ref DataStorage mainstorage, DataLoader dataloader)
     {
+
         foreach (Func<DataStructure.Map.Tile> tileload in loader.TileList)
         {
-            DataStructure.Map.Tile tile1 = tileload();
-            maindata.data.TileStorage.Add(tile1);
-            dataloader.ImageLoad(tile1, maindata);
+            mainstorage.TileStorage.Add(tileload(),dataloader,ref mainstorage);
         }
         foreach(Func<DataStructure.Map.Material> materialload in loader.MaterialList)
         {
-            DataStructure.Map.Material material1 = materialload();
-            maindata.data.MaterialStorage.Add(material1);
+            mainstorage.MaterialStorage.Add(materialload());
         }
-
+        foreach(Func<DataStructure.Map.BaseChunk> basechunkload in loader.BaseChunkList)
+        {
+            mainstorage.BaseChunkStorage.Add(basechunkload());
+        }
 
     }
 }

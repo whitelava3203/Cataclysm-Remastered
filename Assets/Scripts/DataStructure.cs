@@ -8,9 +8,29 @@ using System.Dynamic;
 public class DataStructure : MonoBehaviour
 {
     
-    public interface IntPos
+    public class IntPos
     {
-        bool CheckPos(Vector2Int pos);
+        public bool CheckPos(Vector2Int pos)
+        {
+            if (pos == Position) return true;
+            else return false;
+        }
+        public Vector2Int Position;
+        public Vector3 FixedPosition
+        {
+            get
+            {
+                Vector3 v = new Vector3();
+                v.x = Position.x + 0.5f;
+                v.y = Position.y + 0.5f;
+                return v;
+            }
+            set
+            {
+                Position.x = (int)(value.x - 0.5f);
+                Position.y = (int)(value.y - 0.5f);
+            }
+        }
     }
 
 
@@ -19,17 +39,6 @@ public class DataStructure : MonoBehaviour
 
 
 
-    public CStorage data = new CStorage();
-
-
-
-    public class CStorage
-    {
-        public CodeStructure<Map.Tile> TileStorage = new CodeStructure<Map.Tile>();
-        public CodeStructure<Map.Item> ItemStorage = new CodeStructure<Map.Item>();
-        public CodeStructure<Map.Material> MaterialStorage = new CodeStructure<Map.Material>();
-        public Dictionary<string, Sprite> ImageStorage = new Dictionary<string, Sprite>(); 
-    }
     
     public class Map
     {
@@ -47,7 +56,6 @@ public class DataStructure : MonoBehaviour
         public class ChunkContainer : IntPos
         {
             public Chunk Data;
-            public Vector2Int Position;
 
             public ChunkContainer()
             {
@@ -62,14 +70,8 @@ public class DataStructure : MonoBehaviour
                 Data = chunk1;
                 Position = pos;
             }
-
-            public bool CheckPos(Vector2Int pos)
-            {
-                if (pos==Position) return true;
-                else return false;
-            }
         }
-        public class 기본청크
+        public class BaseChunk : CodeObject
         {
 
         }
@@ -92,7 +94,6 @@ public class DataStructure : MonoBehaviour
         public class TileContainer : IntPos
         {
             public Map.Tile Data;
-            public Vector2Int Position;
 
             public bool IsUpdated = false;
             public bool IsDeleted = false;
@@ -109,11 +110,6 @@ public class DataStructure : MonoBehaviour
             {
                 Data = tile1;
                 Position = pos;
-            }
-            public bool CheckPos(Vector2Int pos)
-            {
-                if (pos == Position) return true;
-                else return false;
             }
         }
         public class Material : CodeObject
@@ -157,6 +153,8 @@ public class DataLoadScript
 {
     public List<Func<DataStructure.Map.Tile>> TileList = new List<Func<DataStructure.Map.Tile>>();
     public List<Func<DataStructure.Map.Material>> MaterialList = new List<Func<DataStructure.Map.Material>>();
+
+    public List<Func<DataStructure.Map.BaseChunk>> BaseChunkList = new List<Func<DataStructure.Map.BaseChunk>>();
 }
 
 
@@ -197,10 +195,10 @@ public class LangString
         return "EMPTY";
     }
 }
-public class CodeStructure<T> where T : CodeObject
+public class CodeDictionary<T> where T : CodeObject
 {
-    private Dictionary<string, T> data = new Dictionary<string, T>();
-    private List<string> codedata = new List<string>();
+    protected Dictionary<string, T> data = new Dictionary<string, T>();
+    protected List<string> codedata = new List<string>();
     public T this[int index]
     {
         get
@@ -223,7 +221,7 @@ public class CodeStructure<T> where T : CodeObject
             data[key] = value;
         }
     }
-    public void Add(T obj)
+    public virtual void Add(T obj)
     {
         this.data.Add(obj.CodeName, obj);
         this.codedata.Add(obj.CodeName);
@@ -235,6 +233,16 @@ public class CodeStructure<T> where T : CodeObject
     }
 
 
+}
+public class DrawDictionary<T> : CodeDictionary<T> where T : Drawable
+{
+
+    public void Add(T drawobj,DataLoader dataloader, ref DataStorage datastorage)
+    {
+        this.data.Add(drawobj.CodeName, drawobj);
+        this.codedata.Add(drawobj.CodeName);
+        dataloader.ImageLoad(drawobj, ref datastorage);
+    }
 }
 public class CodeObject
 {
@@ -303,8 +311,21 @@ public class Drawable : CodeObject
 }
 public class DataStorage
 {
-    public CodeStructure<DataStructure.Map.Tile> TileStorage = new CodeStructure<DataStructure.Map.Tile>();
-    public CodeStructure<DataStructure.Map.Item> ItemStorage = new CodeStructure<DataStructure.Map.Item>();
-    public CodeStructure<DataStructure.Map.Material> MaterialStorage = new CodeStructure<DataStructure.Map.Material>();
+    public DrawDictionary<DataStructure.Map.Tile> TileStorage = new DrawDictionary<DataStructure.Map.Tile>();
+    public CodeDictionary<DataStructure.Map.Item> ItemStorage = new CodeDictionary<DataStructure.Map.Item>();
+    public CodeDictionary<DataStructure.Map.Material> MaterialStorage = new CodeDictionary<DataStructure.Map.Material>();
     public Dictionary<string, Sprite> ImageStorage = new Dictionary<string, Sprite>();
+
+    public CodeDictionary<DataStructure.Map.BaseChunk> BaseChunkStorage = new CodeDictionary<DataStructure.Map.BaseChunk>();
+}
+
+public static class BaseObject
+{
+    public static GameObject Tile
+    {
+        get
+        {
+            return GameObject.Find("BaseTile");
+        }
+    }
 }
